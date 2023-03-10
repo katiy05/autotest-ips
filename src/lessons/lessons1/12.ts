@@ -1,19 +1,19 @@
-function nechetnye(chet: number = 1){
-    for (chet; chet <= 100; chet++) {
-        if (chet%2!=0) {
-            console.log(chet)
-        }    
+function nechetnye() {
+    for (let i: number = 0; i <= 100; i++) {
+        if (i % 2 !== 0) {
+            console.log(i)
+        }
     }
 }
 
-function chetnye(chet: number = 1){
-    for (chet; chet <= 100; chet++) {
-        if (chet%2===0) {
-            console.log(chet)
-        }    
+function chetnye() {
+    for (let i: number = 0; i <= 100; i++) {
+        if (i % 2 === 0) {
+            console.log(i)
+        }
     }
-    nechetnye()
 }
 chetnye()
+nechetnye()
 
 
