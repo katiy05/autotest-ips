@@ -14,7 +14,7 @@ class Car {
     }
 
     public getState(): void {
-        !this.isTurn ? console.log('Автомобиль выключен') : console.log('Автомобиль включен')
+        this.isTurn ? console.log('Автомобиль включен') : console.log('Автомобиль выключен')
     }
 }
 
