@@ -9,11 +9,18 @@ class IssuesPage {
         this.browser = browser
     }
 
-    public async getBugText(): Promise<void> {
-        await this.getBug().waitForDisplayed({
+    public async getBugSelectMenuText(): Promise<void> {
+        await this.getBugSelectMenu().waitForDisplayed({
             timeoutMsg: 'Bug text was not displayed'
         })
-        await this.getBug().getText()
+        await this.getBugSelectMenu().getText()
+    }
+
+    public async getUnderCommentIssueText(): Promise<void> {
+        await this.getBugUnderCommentIssue().waitForDisplayed({
+            timeoutMsg: 'Bug text was not displayed'
+        })
+        await this.getBugUnderCommentIssue().getText()
     }
 
     public async getCommentText(): Promise<string> {
@@ -178,8 +185,12 @@ class IssuesPage {
         await this.submitNewIssue()
     }
 
-    private getBug(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@id="label-ac5baf"]')
+    private getBugSelectMenu(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[contains(@class, "js-issue-labels")]//*[@data-name="bug"]/span')
+    }
+
+    private getBugUnderCommentIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[@class="TimelineItem-body"]//*[@data-name="bug"]/span')
     }
 
     private getButtonCloseIssue(): ChainablePromiseElement<WebdriverIO.Element> {

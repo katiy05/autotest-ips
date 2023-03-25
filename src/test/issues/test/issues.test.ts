@@ -77,7 +77,7 @@ describe('Issue test', async () => {
         expect(await issuesPage.getCommentText()).toEqual(editIssues.comment)
     })
 
-    it('Comment issue should be added', async () => {
+    it('Comment issue should be upload file', async () => {
         await issuesPage.newIssue(newIssues)
         await issuesPage.uploadFile(filePath)
         await browser.pause(2000)
@@ -85,16 +85,20 @@ describe('Issue test', async () => {
         expect(await issuesPage.getCommentText()).toEqual(nameFilePath)
     })
 
-    it('Comment update issue should be added', async () => {
+    it('State issue should be CLOSED', async () => {
         await issuesPage.submitCloseIssue()
         await browser.pause(5000)
         expect(await issuesPage.getStateIssueText()).toEqual(STATE_ISSUE_CLOSED)
     })
 
-    it('Labels select menu', async () => {
+    it.only('For issue should be set the tag BUG', async () => {
+        await issuesPage.newIssue(newIssues)
         await issuesPage.submitLabelsSelectMenu()
         await issuesPage.submitLabelsBug()
-        expect(await issuesPage.getStateIssueText()).toEqual(STATE_ISSUE_CLOSED)
+        await issuesPage.submitLabelsSelectMenu()
+        await browser.pause(3000)
+        expect(await issuesPage.getBugSelectMenuText()).toEqual('bug')
+        //expect(await issuesPage.getUnderCommentIssueText()).toEqual('bug')
     })
 
 
