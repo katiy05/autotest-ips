@@ -4,7 +4,7 @@ import { IssuesPage } from '../page-object/Issues.page'
 import { createUserModel, UserModel } from '../../login/model/user.model'
 import { userData } from '../../login/data/user.data'
 import { createIssuesModel, IssuesModel } from '../model/issues.model'
-import { editIssuesData, issuesData, newIssuesData } from '../data/issues.data'
+import { editIssuesData, newIssuesData } from '../data/issues.data'
 
 const SET_EMPTY = ''
 const BODY_ISSUE = 'Поправить форматирование текста'
@@ -85,13 +85,23 @@ describe('Issue test', async () => {
         expect(await issuesPage.getCommentText()).toEqual(nameFilePath)
     })
 
+    it.only('Comment issue should be deleted', async () => {
+        await issuesPage.newIssue(newIssues)
+        await issuesPage.setNewComment(newIssues.comment)
+        await issuesPage.submitComment()
+        await issuesPage.submitCommentMenu()
+        await issuesPage.submitDeleteComment()
+        await browser.keys('Enter')
+        //expect(await issuesPage.getCommentText()).toEqual(editIssues.comment)
+    })
+
     it('State issue should be CLOSED', async () => {
         await issuesPage.submitCloseIssue()
         await browser.pause(5000)
         expect(await issuesPage.getStateIssueText()).toEqual(STATE_ISSUE_CLOSED)
     })
 
-    it.only('For issue should be set the tag BUG', async () => {
+    it('For issue should be set the tag BUG', async () => {
         await issuesPage.newIssue(newIssues)
         await issuesPage.submitLabelsSelectMenu()
         await issuesPage.submitLabelsBug()
@@ -99,6 +109,17 @@ describe('Issue test', async () => {
         await browser.pause(3000)
         expect(await issuesPage.getBugSelectMenuText()).toEqual('bug')
         //expect(await issuesPage.getUnderCommentIssueText()).toEqual('bug')
+    })
+
+    it('Issue should be deleted', async () => {
+        await issuesPage.newIssue(newIssues)
+        await issuesPage.submitDeleteIssue()
+        await issuesPage.submitVerifyDeleteIssue()
+        await browser.pause(2000)
+        await listIssuesPage.setSearchDeletedIssue(newIssues.titleIssues)
+        await browser.keys('Enter')
+        await browser.pause(2000)
+        expect(await listIssuesPage.isDisplayedNoResultsSearch()).toEqual(true)
     })
 
 

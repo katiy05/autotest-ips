@@ -73,6 +73,8 @@ class IssuesPage {
         return this.getFieldNewComment().setValue(newComment)
     }
 
+
+
     public async setTitleIssue(titleIssues: string): Promise<void> {
         await this.getFieldTitleIssue().waitForDisplayed({
             timeoutMsg: 'Field title issue was not displayed'
@@ -117,7 +119,7 @@ class IssuesPage {
 
     public async submitEditComment(): Promise<void> {
         await this.getButtonEditComment().waitForClickable({
-            timeoutMsg: 'Submit edit comment was not clickable'
+            timeoutMsg: 'Button edit comment was not clickable'
         })
         await this.getButtonEditComment().click()
     }
@@ -276,6 +278,8 @@ class IssuesPage {
     private getTitleIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="partial-discussion-header"]//bdi')
     }
+
+
 
 }
 
