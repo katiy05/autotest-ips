@@ -9,18 +9,18 @@ class IssuesPage {
         this.browser = browser
     }
 
-    public async getBugSelectMenuText(): Promise<void> {
-        await this.getBugSelectMenu().waitForDisplayed({
-            timeoutMsg: 'Bug text was not displayed'
+    public async getSidebarLabelText(): Promise<string> {
+        await this.getSidebarLabel().waitForDisplayed({
+            timeoutMsg: 'Labels bug text was not displayed'
         })
-        await this.getBugSelectMenu().getText()
+        return this.getSidebarLabel().getText()
     }
 
-    public async getUnderCommentIssueText(): Promise<void> {
-        await this.getBugUnderCommentIssue().waitForDisplayed({
+    public async getLabelIssueText(): Promise<string> {
+        await this.getLabelIssue().waitForDisplayed({
             timeoutMsg: 'Bug text was not displayed'
         })
-        await this.getBugUnderCommentIssue().getText()
+        return this.getLabelIssue().getText()
     }
 
     public async getCommentText(): Promise<string> {
@@ -44,8 +44,8 @@ class IssuesPage {
         return this.getTitleIssue().getText()
     }
 
-    public async isClickableSubmitNewIssue(): Promise<boolean> {
-        return this.getButtonSubmitNewIssue().isClickable()
+    public async isClickableButtonNewIssue(): Promise<boolean> {
+        return this.getButtonNewIssue().isClickable()
     }
 
     public async open(): Promise<void> {
@@ -53,36 +53,34 @@ class IssuesPage {
     }
 
     public async setCommentIssue(commentIssues: string): Promise<void> {
-        await this.getFieldCommentIssue().waitForDisplayed({
+        await this.getCommentIssueField().waitForDisplayed({
             timeoutMsg: 'Field comment issue was not displayed'
         })
-        return this.getFieldCommentIssue().setValue(commentIssues)
+        return this.getCommentIssueField().setValue(commentIssues)
     }
 
     public async setEditComment(editComment: string): Promise<void> {
-        await this.getFieldEditComment().waitForDisplayed({
+        await this.getEditCommentField().waitForDisplayed({
             timeoutMsg: 'Field edit comment was not displayed'
         })
-        return this.getFieldEditComment().setValue(editComment)
+        return this.getEditCommentField().setValue(editComment)
     }
 
-    public async setNewComment(newComment: string): Promise<void> {
-        await this.getFieldNewComment().waitForDisplayed({
+    public async setComment(newComment: string): Promise<void> {
+        await this.getNewCommentField().waitForDisplayed({
             timeoutMsg: 'Field new comment was not displayed'
         })
-        return this.getFieldNewComment().setValue(newComment)
+        return this.getNewCommentField().setValue(newComment)
     }
-
-
 
     public async setTitleIssue(titleIssues: string): Promise<void> {
-        await this.getFieldTitleIssue().waitForDisplayed({
+        await this.getTitleIssueField().waitForDisplayed({
             timeoutMsg: 'Field title issue was not displayed'
         })
-        return this.getFieldTitleIssue().setValue(titleIssues)
+        return this.getTitleIssueField().setValue(titleIssues)
     }
 
-    public async submitCloseIssue(): Promise<void> {
+    public async сloseIssue(): Promise<void> {
         await this.getButtonCloseIssue().waitForClickable({
             timeoutMsg: 'Submit close issue was not clickable'
         })
@@ -96,7 +94,7 @@ class IssuesPage {
         await this.getButtonComment().click()
     }
 
-    public async submitCommentMenu(): Promise<void> {
+    public async openCommentMenu(): Promise<void> {
         await this.getCommentMenu().waitForClickable({
             timeoutMsg: 'Submit comment menu was not clickable'
         })
@@ -117,7 +115,7 @@ class IssuesPage {
         await this.getButtonDeleteIssue().click()
     }
 
-    public async submitEditComment(): Promise<void> {
+    public async openEditComment(): Promise<void> {
         await this.getButtonEditComment().waitForClickable({
             timeoutMsg: 'Button edit comment was not clickable'
         })
@@ -131,42 +129,42 @@ class IssuesPage {
         await this.getButtonEditTitleIssue().click()
     }
 
-    public async submitLabelsBug(): Promise<void> {
+    public async addLabelsBug1(): Promise<void> {
         await this.getLabelsBug().waitForClickable({
             timeoutMsg: 'Submit button confirmation delete issue was not clickable'
         })
         await this.getLabelsBug().click()
     }
 
-    public async submitLabelsSelectMenu(): Promise<void> {
-        await this.getLabelsSelectMenu().waitForClickable({
-            timeoutMsg: 'Submit labels select menu was not clickable'
+    public async sidebarLabels(): Promise<void> {
+        await this.getSidebarLabels().waitForClickable({
+            timeoutMsg: 'Sidebar labels was not clickable'
         })
-        await this.getLabelsSelectMenu().click()
+        await this.getSidebarLabels().click()
     }
 
-    public async submitUpdateComment(): Promise<void> {
+    public async submitEditComment(): Promise<void> {
         await this.getButtonUpdateComment().waitForClickable({
             timeoutMsg: 'Button update comment was not clickable'
         })
         await this.getButtonUpdateComment().click()
     }
 
-    public async submitNewIssue(): Promise<void> {
-        await this.getButtonSubmitNewIssue().waitForClickable({
+    public async submitIssue(): Promise<void> {
+        await this.getButtonNewIssue().waitForClickable({
             timeoutMsg: 'Button submit new issue was not clickable'
         })
-        await this.getButtonSubmitNewIssue().click()
+        await this.getButtonNewIssue().click()
     }
 
-    public async submitSaveTitleIssue(): Promise<void> {
+    public async saveTitleIssue(): Promise<void> {
         await this.getButtonSaveTitleIssue().waitForClickable({
             timeoutMsg: 'Button save title issue was not clickable'
         })
         await this.getButtonSaveTitleIssue().click()
     }
 
-    public async submitVerifyDeleteIssue(): Promise<void> {
+    public async verifyDeleteIssue(): Promise<void> {
         await this.getButtonVerifyDeleteIssue().waitForClickable({
             timeoutMsg: 'Submit verify delete issue was not clickable'
         })
@@ -181,18 +179,18 @@ class IssuesPage {
         await this.getButtonUploadFileToComment().setValue(file)
     }
 
-    public async newIssue(issue: IssuesModel): Promise<void> {
+    public async submitFilledIssue(issue: IssuesModel): Promise<void> {
         await this.setTitleIssue(issue.titleIssues)
         await this.setCommentIssue(issue.comment)
-        await this.submitNewIssue()
+        await this.submitIssue()
     }
 
-    private getBugSelectMenu(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getSidebarLabel(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[contains(@class, "js-issue-labels")]//*[@data-name="bug"]/span')
     }
 
-    private getBugUnderCommentIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@class="TimelineItem-body"]//*[@data-name="bug"]/span')
+    private getLabelIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[@class="TimelineItem-body"]//*[contains(@id, "label")]')
     }
 
     private getButtonCloseIssue(): ChainablePromiseElement<WebdriverIO.Element> {
@@ -223,7 +221,7 @@ class IssuesPage {
         return this.browser.$('//*[@data-disable-with="Updating"]')
     }
 
-    private getButtonSubmitNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getButtonNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="new_issue"]//*[contains(@class, "flex-items-center")]/button')
     }
 
@@ -247,19 +245,19 @@ class IssuesPage {
         return this.browser.$('//*[contains(@id, "issuecomment")]//*[contains(@class, "timeline-comment-actions")]/details')
     }
 
-    private getFieldCommentIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getCommentIssueField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="issue_body"]')
     }
 
-    private getFieldEditComment(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getEditCommentField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@name="issue_comment[body]"]')
     }
 
-    private getFieldNewComment(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getNewCommentField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="new_comment_field"]')
     }
 
-    private getFieldTitleIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getTitleIssueField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="issue_title"]')
     }
 
@@ -267,7 +265,7 @@ class IssuesPage {
         return this.browser.$('//*[@id="labels-select-menu"]//*[@data-prio-filter-value="bug"]')
     }
 
-    private getLabelsSelectMenu(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getSidebarLabels(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="labels-select-menu"]/summary')
     }
 
@@ -279,6 +277,39 @@ class IssuesPage {
         return this.browser.$('//*[@id="partial-discussion-header"]//bdi')
     }
 
+    public async editComment(editComment: string): Promise<void> {
+        await this.openCommentMenu()
+        await this.openEditComment()
+        await this.setEditComment(editComment)
+        await this.submitEditComment()
+    }
+
+    public async addComment(comment: string): Promise<void> {
+        await this.setComment(comment)
+        await this.submitComment()
+    }
+
+    public async deleteComment(): Promise<void> {
+        await this.openCommentMenu()
+        await this.submitDeleteComment()
+        await browser.acceptAlert()
+    }
+
+    public async notDisplayedComment(): Promise<boolean> {
+        await browser.pause(1000)
+        return this.getComment().isDisplayed()
+    }
+
+    public async addLabeldBug(): Promise<void> {
+        await this.sidebarLabels()
+        await this.addLabelsBug1()
+        await this.sidebarLabels()
+    }
+
+    public async deleteIssue(): Promise<void> {
+        await this.submitDeleteIssue()
+        await this.verifyDeleteIssue()
+    }
 
 
 }

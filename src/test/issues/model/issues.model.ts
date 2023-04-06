@@ -7,7 +7,7 @@ type IssuesModel = {
 
 function createIssuesModel(data: IssuesData): IssuesModel {
     return {
-        titleIssues: data.titleIssues,
+        titleIssues: data.title,
         comment: data.comment,
     }
 }

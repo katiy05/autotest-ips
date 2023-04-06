@@ -8,14 +8,18 @@ class ListIssuesPage {
         this.browser = browser
     }
 
-    public async setSearchDeletedIssue(titleIssues: string): Promise<void> {
+    public async setIssueSearch(titleIssues: string): Promise<void> {
         await this.getFieldSearch().waitForDisplayed({
             timeoutMsg: 'Field search was not displayed'
         })
         return this.getFieldSearch().setValue(titleIssues)
     }
+    public async searchIssue(titleIssues: string): Promise<void> {
+        await this.setIssueSearch(titleIssues)
+        await browser.keys('Enter')
+    }
 
-    public async submitNewIssues(): Promise<void> {
+    public async createIssue(): Promise<void> {
         await this.getButtonNewIssues().waitForClickable({
             timeoutMsg: 'Button new issues was not clickable'
         })
@@ -38,7 +42,7 @@ class ListIssuesPage {
         return this.browser.$('//*[@id="repo-content-turbo-frame"]//*[contains(@class, "blankslate-large")]')
     }
 
-    public async isDisplayedNoResultsSearch(): Promise<boolean> {
+    public async isDisplayedNoResultsBlock(): Promise<boolean> {
         return this.getNoResultsSearch().isDisplayed()
     }
 

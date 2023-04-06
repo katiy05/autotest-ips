@@ -5,16 +5,16 @@ import { MainPage } from '../page-object/Main.page'
 
 const INVALID_LOGIN: string = 'katiy'
 const INVALID_PASSWORD: string = '12345'
+const TEST_MASK = 'user-login-test'
 
 describe('Login form test', async () => {
     let loginPage: LoginPage
     let mainPage: MainPage
-    let user: UserModel
+    const user: UserModel = createUserModel(userData(TEST_MASK))
 
-    before(async () => {
+    before(() => {
         loginPage = new LoginPage(browser)
         mainPage = new MainPage(browser)
-        user = createUserModel(userData)
     })
 
     beforeEach(async () => {

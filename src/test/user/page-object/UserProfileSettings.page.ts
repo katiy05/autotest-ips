@@ -1,5 +1,5 @@
 import { ChainablePromiseElement } from 'webdriverio'
-import { UserProfileSettingsModel } from '../model/userProfileSettings.model'
+import { UserModel } from '../model/user.model'
 
 class UserProfileSettingsPage {
     protected browser: WebdriverIO.Browser
@@ -7,6 +7,12 @@ class UserProfileSettingsPage {
 
     constructor(browser: WebdriverIO.Browser) {
         this.browser = browser
+    }
+
+    public async clearUserSettings(userSettings: UserModel): Promise<void> {
+        await this.setUserName(userSettings.name!)
+        await this.setBio(userSettings.bio!)
+        await this.setPronouns(userSettings.pronouns)
     }
 
     public async getUserNameText(): Promise<string> {
@@ -32,6 +38,37 @@ class UserProfileSettingsPage {
         await this.browser.url(this.url)
     }
 
+    public async removeAvatar(): Promise<void> {
+        await this.submitButtonEditAvatar()
+        await this.submitButtonRemoveAvatar()
+    }
+
+    public async setBio(nameUser: string): Promise<void> {
+        await this.getBioField().waitForDisplayed({
+            timeoutMsg: 'Bio field was not displaed'
+        })
+        await this.getBioField().setValue(nameUser)
+    }
+
+    public async setPronouns(pronouns: string): Promise<void> {
+        await this.getPronounsField().getText()
+        await this.getPronounsField().selectByVisibleText(pronouns)
+    }
+
+    public async setUserName(nameUser: string): Promise<void> {
+        await this.getUserNameField().waitForDisplayed({
+            timeoutMsg: 'User profile name field was not displaed'
+        })
+        await this.getUserNameField().setValue(nameUser)
+    }
+
+    public async submitButtonEditAvatar(): Promise<void> {
+        await this.getButtonEditAvatar().waitForClickable({
+            timeoutMsg: "Button edit avatar was not clickable"
+        })
+        await this.getButtonEditAvatar().click()
+    }
+
     public async submitButtonInstallNewAvatar(): Promise<void> {
         await this.getButtonInstallNewAvatar().waitForClickable({
             timeoutMsg: 'Submit button was not clickable'
@@ -39,29 +76,11 @@ class UserProfileSettingsPage {
         await this.getButtonInstallNewAvatar().click()
     }
 
-    public async setBio(nameUser: UserProfileSettingsModel): Promise<void> {
-        await this.getBioField().waitForDisplayed({
-            timeoutMsg: 'Bio field was not displaed'
+    public async submitButtonRemoveAvatar(): Promise<void> {
+        await this.getButtonRemoveAvatar().waitForClickable({
+            timeoutMsg: "Button remove avatar was not clickable"
         })
-        await this.getBioField().setValue(nameUser.bio)
-    }
-
-    public async setPronouns(pronouns: UserProfileSettingsModel): Promise<void> {
-        await this.getPronounsField().getText()
-        await this.getPronounsField().selectByVisibleText(pronouns.pronouns)
-    }
-
-    public async setUserName(nameUser: UserProfileSettingsModel): Promise<void> {
-        await this.getUserNameField().waitForDisplayed({
-            timeoutMsg: 'User profile name field was not displaed'
-        })
-        await this.getUserNameField().setValue(nameUser.nameUser)
-    }
-
-    public async clearUserSettings(userSettings: UserProfileSettingsModel): Promise<void> {
-        await this.setUserName(userSettings)
-        await this.setBio(userSettings)
-        await this.setPronouns(userSettings)
+        await this.getButtonRemoveAvatar().click()
     }
 
     public async submitUpdateProfile(): Promise<void> {
@@ -116,7 +135,6 @@ class UserProfileSettingsPage {
         return this.browser.$('//*[@id="user_profile_email"]')
     }
 
-    //dfffffffffff
     private getButtonEditAvatar(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="settings-frame"]//details/summary')
     }
@@ -125,24 +143,6 @@ class UserProfileSettingsPage {
         return this.browser.$('//*[@id="settings-frame"]//details/details-menu/form/button')
     }
 
-    public async submitButtonEditAvatar(): Promise<void> {
-        await this.getButtonEditAvatar().waitForClickable({
-            timeoutMsg: "Button edit avatar was not clickable"
-        })
-        await this.getButtonEditAvatar().click()
-    }
-
-    public async submitButtonRemoveAvatar(): Promise<void> {
-        await this.getButtonRemoveAvatar().waitForClickable({
-            timeoutMsg: "Button remove avatar was not clickable"
-        })
-        await this.getButtonRemoveAvatar().click()
-    }
-
-    public async removeAvatar(): Promise<void> {
-        await this.submitButtonEditAvatar()
-        await this.submitButtonRemoveAvatar()
-    }
 }
 
 async function showHiddenFileInput(browser: WebdriverIO.Browser): Promise<void> {
