@@ -1,29 +1,15 @@
-import { getDate } from '../../data/getDate'
-import { getRandomInteger } from '../../data/getRandomInteger'
+import { IssuesModel } from "../../../test/issues/model/issues.model"
 
 type CreateIssueRequest = {
-    title: string,
+    title: string | number,
     body?: string,
-    labels?: string
+    labels?: string[],
 }
 
 class IssueAPIDataProvider {
-    public static createIssueData(mask: string): CreateIssueRequest {
+    public static createIssueData(issue: IssuesModel): CreateIssueRequest {
         return {
-            title: `${mask} ${getDate()} ${getRandomInteger(10000, 100000)}`,
-            body: `${mask} ${getDate()} ${getRandomInteger(10000, 100000)}`
-        }
-    }
-}
-
-type GetIssueResponse = {
-    htmlUrl: string,
-}
-
-class GetUrlIssueAPIDataProvider {
-    public static getIssueResponse(): GetIssueResponse {
-        return {
-            htmlUrl: ''
+            title: issue.title,
         }
     }
 }
@@ -31,5 +17,4 @@ class GetUrlIssueAPIDataProvider {
 export {
     CreateIssueRequest,
     IssueAPIDataProvider,
-    GetUrlIssueAPIDataProvider,
 }

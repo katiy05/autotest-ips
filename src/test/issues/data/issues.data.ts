@@ -3,7 +3,7 @@ import { getRandomInteger } from "../../../common/data/getRandomInteger"
 
 type IssuesData = {
     title: string,
-    comment: string,
+    comment?: string,
 }
 
 const issuesData = (mask: string) => {

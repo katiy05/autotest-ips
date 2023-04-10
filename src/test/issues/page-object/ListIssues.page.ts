@@ -8,6 +8,13 @@ class ListIssuesPage {
         this.browser = browser
     }
 
+    public async isDisplayedNoResultsBlock(): Promise<boolean> {
+        await this.getNoResultsSearch().waitForDisplayed({
+            timeoutMsg: 'No results search was not displayed'
+        })
+        return this.getNoResultsSearch().isDisplayed()
+    }
+
     public async setIssueSearch(titleIssues: string): Promise<void> {
         await this.getFieldSearch().waitForDisplayed({
             timeoutMsg: 'Field search was not displayed'
@@ -41,12 +48,6 @@ class ListIssuesPage {
     private getNoResultsSearch(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="repo-content-turbo-frame"]//*[contains(@class, "blankslate-large")]')
     }
-
-    public async isDisplayedNoResultsBlock(): Promise<boolean> {
-        return this.getNoResultsSearch().isDisplayed()
-    }
-
-
 }
 
 export {

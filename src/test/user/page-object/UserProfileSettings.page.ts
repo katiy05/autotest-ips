@@ -142,7 +142,6 @@ class UserProfileSettingsPage {
     private getButtonRemoveAvatar(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="settings-frame"]//details/details-menu/form/button')
     }
-
 }
 
 async function showHiddenFileInput(browser: WebdriverIO.Browser): Promise<void> {

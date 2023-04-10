@@ -32,16 +32,7 @@ const userData = (mask: string, data?: Partial<UserData>) => {
     }
 }
 
-const clearUserProfileData: UserData = {
-    login: LOGIN,
-    password: PASSWORD,
-    name: '',
-    bio: '',
-    pronouns: PronounsOptions.OPTION_1,
-}
-
 export {
     UserData,
     userData,
-    clearUserProfileData,
 }

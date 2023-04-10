@@ -1,13 +1,13 @@
 import { IssuesData } from "../data/issues.data"
 
 type IssuesModel = {
-    titleIssues: string,
-    comment: string,
+    title: string,
+    comment?: string
 }
 
 function createIssuesModel(data: IssuesData): IssuesModel {
     return {
-        titleIssues: data.title,
+        title: data.title,
         comment: data.comment,
     }
 }

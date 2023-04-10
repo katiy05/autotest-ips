@@ -3,7 +3,7 @@ import { UserProfileSettingsPage } from '../page-object/UserProfileSettings.page
 import { UserProfilePage } from '../page-object/UserProfile.page'
 import { EmailSettingsPage } from '../page-object/EmailSettings.page'
 import { createUserModel, UserModel } from '../model/user.model'
-import { clearUserProfileData, userData } from '../data/user.data'
+import { userData } from '../data/user.data'
 import { UserAPIService } from '../../../common/api/api-service/UserAPIService'
 
 const INVALID_FILE_PATH = 'src/files/favicon.ico'
@@ -22,7 +22,6 @@ describe('Update user profile settings test', async () => {
         userProfilePage = new UserProfilePage(browser)
         userProfileSettingsPage = new UserProfileSettingsPage(browser)
         await UserAPIService.deleteAuthenticatedUser()
-        //await UserAPIService.updateAuthenticatedUser(user)
         await loginPage.open()
         await loginPage.login(user)
     })
@@ -83,15 +82,9 @@ describe('Update user profile settings test', async () => {
 
     after(async () => {
         await UserAPIService.deleteAuthenticatedUser()
-        // const userClear: UserModel = createUserModel(clearUserProfileData)
-        // await userProfileSettingsPage.open()
-        // await userProfileSettingsPage.clearUserSettings(userClear)
-        // await userProfileSettingsPage.submitUpdateProfile()
-
         if (await userProfileSettingsPage.isClickableUserProfileEmail()) {
             await emailSettingsPage.open()
             await emailSettingsPage.submitValueToggle()
-            await userProfileSettingsPage.open()
         }
     })
 })

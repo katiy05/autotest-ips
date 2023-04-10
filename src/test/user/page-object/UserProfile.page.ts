@@ -36,7 +36,6 @@ class UserProfilePage {
     private getUserName(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//h1//*[contains(@class, "p-name")]')
     }
-
 }
 
 export {

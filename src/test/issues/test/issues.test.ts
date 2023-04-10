@@ -5,7 +5,9 @@ import { createUserModel, UserModel } from '../../user/model/user.model'
 import { userData } from '../../user/data/user.data'
 import { createIssuesModel, IssuesModel } from '../model/issues.model'
 import { issuesData } from '../data/issues.data'
-import { IssueAPIService } from '../../../common/api/api-service/IssueAPIService'
+import { CreateIssueResponse, IssueAPIService } from '../../../common/api/api-service/IssueAPIService'
+import { AxiosResponse } from 'axios'
+import { LOGIN, REPO } from '../../../../credential'
 
 const FILE_PATH = 'src/files/fileForIssue.docx'
 const NAME_FILE_PATH = 'fileForIssue.docx'
@@ -18,8 +20,8 @@ describe('Issue create test', () => {
     let listIssuesPage: ListIssuesPage
     let issuesPage: IssuesPage
     let user: UserModel
-    let newIssue: IssuesModel
     let editIssues: IssuesModel
+    let issue: IssuesModel
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -32,53 +34,51 @@ describe('Issue create test', () => {
         await loginPage.login(user)
     })
 
-    // beforeEach(async () => {
-    //     // newIssue = createIssuesModel(issuesData(TEST_MASK))
-    //     // await listIssuesPage.open()
-    //     // await listIssuesPage.createIssue()
-    //     await IssueAPIService.createIssue()
-    // })
+    beforeEach(async () => {
+        issue = createIssuesModel(issuesData(TEST_MASK))
+        await listIssuesPage.open()
+        await listIssuesPage.createIssue()
+    })
 
-    // it('Issue should be creat', async () => {
-    //     await issuesPage.setTitleIssue(newIssue.titleIssues)
-    //     await issuesPage.submitIssue()
-    //     expect(await issuesPage.getTitleIssueText()).toEqual(newIssue.titleIssues)
-    // })
+    it('Issue should be creat', async () => {
+        await issuesPage.setTitleIssue(issue.title)
+        await issuesPage.submitIssue()
+        expect(await issuesPage.getTitleIssueText()).toEqual(issue.title)
+    })
 
-    // it('Without a title button New issue is disabled', async () => {
-    //     await issuesPage.setCommentIssue(newIssue.comment)
-    //     expect(await issuesPage.isClickableButtonNewIssue()).toEqual(false)
-    // })
+    it('Without a title button New issue is disabled', async () => {
+        await issuesPage.setCommentIssue(issue.comment!)
+        expect(await issuesPage.isClickableButtonNewIssue()).toEqual(false)
+    })
 
     describe('Issue deleted test', async () => {
         beforeEach(async () => {
-            await IssueAPIService.createIssue()
+            const response: AxiosResponse<CreateIssueResponse> = await IssueAPIService.createIssue(LOGIN, REPO, issue)
+            await browser.url(response.data.html_url)
         })
 
         it('Issue should be deleted', async () => {
             await issuesPage.deleteIssue()
-            await browser.pause(2000)
-            await listIssuesPage.searchIssue(newIssue.titleIssues)
-            await browser.pause(2000)
+            await listIssuesPage.searchIssue(issue.title)
             expect(await listIssuesPage.isDisplayedNoResultsBlock()).toEqual(true)
         })
 
         describe('Issue test', () => {
             it('Title issue should be edit ', async () => {
                 await issuesPage.submitEditTitleIssue()
-                await issuesPage.setTitleIssue(newIssue.titleIssues)
+                await issuesPage.setTitleIssue(issue.title)
                 await issuesPage.saveTitleIssue()
-                expect(await issuesPage.getTitleIssueText()).toEqual(newIssue.titleIssues)
+                expect(await issuesPage.getTitleIssueText()).toEqual(issue.title)
             })
 
             it('Comment issue should be added', async () => {
-                await issuesPage.addComment(newIssue.comment)
-                expect(await issuesPage.getCommentText()).toEqual(newIssue.comment)
+                await issuesPage.addComment(issue.comment!)
+                expect(await issuesPage.getCommentText()).toEqual(issue.comment)
             })
 
-            it.only('Comment update issue should be added', async () => {
-                await issuesPage.addComment(newIssue.comment)
-                await issuesPage.editComment(editIssues.comment)
+            it('Comment update issue should be added', async () => {
+                await issuesPage.addComment(issue.comment!)
+                await issuesPage.editComment(editIssues.comment!)
                 expect(await issuesPage.getCommentText()).toEqual(editIssues.comment)
             })
 
@@ -90,7 +90,7 @@ describe('Issue create test', () => {
             })
 
             it('Comment issue should be deleted', async () => {
-                await issuesPage.addComment(newIssue.comment)
+                await issuesPage.addComment(issue.comment!)
                 await issuesPage.deleteComment()
                 expect(await issuesPage.notDisplayedComment()).toEqual(false)
             })
@@ -103,7 +103,6 @@ describe('Issue create test', () => {
 
             it('For issue should be set the tag BUG', async () => {
                 await issuesPage.addLabeldBug()
-                await browser.pause(3000)
                 expect(await issuesPage.getSidebarLabelText()).toEqual(LABEL_ISSUE_BAG)
                 expect(await issuesPage.getLabelIssueText()).toEqual(LABEL_ISSUE_BAG)
             })
