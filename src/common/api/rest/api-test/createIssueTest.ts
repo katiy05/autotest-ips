@@ -5,20 +5,19 @@ import { IssuesModel, createIssuesModel } from "../../../../test/issues/model/is
 import { IssueAPIProvider } from "../../api-provider/IssueAPIProvider"
 import { CreateIssueResponse, GetIssueResponse } from "../../api-service/IssueAPIService"
 
-// const fetch = require('node-fetch')
-const FORBIDDEN_CREATE_ISUUE = 'lubawa'
+//const fetch = require('node-fetch')
+const FORBIDDEN_CREATE_ISUUE = 'close-repository'
 const NOT_FOUND_REPO = 'repository'
-const owner = 'lubawa1'
 
 describe('POST /repos/{owner}/{repo}/issues', () => {
     let issue: IssuesModel
-    const mask: string = 'test-issue'
+    const mask: string = 'issue-api-test'
 
     beforeEach(async () => {
         issue = createIssuesModel(issuesData(mask))
     })
 
-    it.only('issue should be create', async () => {
+    it('issue should be create', async () => {
         const issueAPIProvider: IssueAPIProvider = new IssueAPIProvider(false)
         const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(
             LOGIN,
@@ -38,22 +37,19 @@ describe('POST /repos/{owner}/{repo}/issues', () => {
             LOGIN,
             REPO
         )
-        const name_issue: string | undefined = responseGetIssues.data.html_url.find((issues: string) => issues = response.data.title)
-        console.log(name_issue)
-        //expect(responseGetIssues.data.title).toEqual(issue.title)
+        expect(responseGetIssues.data.find((issues: string) => issues = response.data.title)).not.toEqual(undefined)
     })
 
     it('errors 410 should be create issue', async () => {
         const issueAPIProvider: IssueAPIProvider = new IssueAPIProvider(false)
         const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(
-            owner,
+            LOGIN,
             FORBIDDEN_CREATE_ISUUE,
             {
                 title: issue.title,
             },
         )
-
-        expect(response.status).toEqual(404)
+        expect(response.status).toEqual(410)
     })
 
     it('errors 404 should be create issue', async () => {
@@ -65,7 +61,6 @@ describe('POST /repos/{owner}/{repo}/issues', () => {
                 title: issue.title,
             },
         )
-
         expect(response.status).toEqual(404)
     })
 
@@ -73,13 +68,12 @@ describe('POST /repos/{owner}/{repo}/issues', () => {
         const issueAPIProvider: IssueAPIProvider = new IssueAPIProvider(false)
         const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(
             LOGIN,
-            NOT_FOUND_REPO,
+            REPO,
             {
-                title: './',
+                title: '',
             },
         )
-
-        expect(response.status).toEqual(404)
+        expect(response.status).toEqual(422)
     })
 })
 

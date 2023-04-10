@@ -11,6 +11,7 @@ type CreateIssueResponse = {
 }
 
 type GetIssueResponse = {
+    [x: string]: any;
     id: number[],
     title: string[],
     state: string[],
